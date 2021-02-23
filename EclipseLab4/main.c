@@ -16,6 +16,10 @@ void timerA_config(void){
     TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_CCIE;
 }
 
+void timerA_start(void){
+    TIMER_A0->CTL |= TIMER_A_CTL_MC__UP;
+}
+
 void config_NVIC(void){
     __NVIC_EnableIRQ(TA0_0_IRQn); //enables timer A interrupt
 }
@@ -41,6 +45,7 @@ void main(void)
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
 	timerA_config();
+	timerA_start();
 	gpio_config();
 }
 
