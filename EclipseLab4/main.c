@@ -37,10 +37,15 @@ void gpio_config(void){
 }
 
 void TA0_N_IRQHandler(void){
+    __NVIC_DisableIRQ(TA0_N_IRQn); //disable since we're in the interrupt
+
     //Toggle P2.4
     P2->OUT ^= BIT4;
+
     // Clear the Interrupt Source Flag
-    P6->IFG &= ~BIT1;
+    TIMER_A0->CCTL[1] &= ~TIMER_A_CCTLN_CCIFG;
+
+    __NVIC_EnableIRQ(TA0_N_IRQn); //enable interrupt since we are about to exit handler
 }
 
 //change
