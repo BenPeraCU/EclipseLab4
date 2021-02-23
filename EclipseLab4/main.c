@@ -5,15 +5,6 @@
  * main.c
  */
 
-//change
-void main(void)
-{
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
-
-	timerA_config;
-	gpio_config;
-}
-
 void timerA_config(void){
     TIMER_A0->CTL       |= TIMER_A_CTL_CLR; // clears TimerA0
     TIMER_A0->CTL       |= TIMER_A_CTL_SSEL__SMCLK; //Use SMCLK
@@ -43,3 +34,14 @@ void TA0_0_IRQHandler(void){
 // Clear the Interrupt Source Flag
     P6->IFG &= ~BIT1;
 }
+
+//change
+void main(void)
+{
+	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+
+	timerA_config();
+	gpio_config();
+}
+
+
