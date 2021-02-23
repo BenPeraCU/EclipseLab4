@@ -15,12 +15,12 @@ void timerA_config(void){
     TIMER_A0->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 2 ---- division by 4
     TIMER_A0->CCR[0]    = TICKS;
     TIMER_A0->CCR[1]    = TICKS - 10;
-    TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_OUTMOD_7; //Resets Output
-    TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_OUTMOD_4; // Sets output to toggle
     //TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_CCIE;
 }
 
 void timerA_start(void){
+    TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_OUTMOD_7; //Resets Output
+    TIMER_A0->CCTL[1]   &= TIMER_A_CCTLN_OUTMOD_4; // Sets output to toggle
     TIMER_A0->CTL |= TIMER_A_CTL_MC__UP;
 }
 
