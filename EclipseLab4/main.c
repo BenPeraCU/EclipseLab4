@@ -52,6 +52,7 @@ void main(void)
 	timerA_config();
 	timerA_start();
 	gpio_config();
+	config_NVIC();
 	while(1){
 }
 
