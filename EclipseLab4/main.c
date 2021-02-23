@@ -14,7 +14,7 @@ void timerA_config(void){
     TIMER_A0->CTL       |= TIMER_A_CTL_SSEL__SMCLK; //Use SMCLK
     TIMER_A0->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 2 ---- division by 4
     TIMER_A0->CCR[0]    = TICKS;
-    TIMER_A0->CCR[1]    = TICKS - 10;
+    TIMER_A0->CCR[1]    = TICKS -10;
     TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_CCIE;
 }
 
@@ -25,7 +25,7 @@ void timerA_start(void){
 }
 
 void config_NVIC(void){
-    __NVIC_EnableIRQ(TA0_0_IRQn); //enables timer A interrupt
+    __NVIC_EnableIRQ(TA0_N_IRQn); //enables timer A interrupt
 }
 
 void gpio_config(void){
@@ -36,10 +36,10 @@ void gpio_config(void){
     P2->SEL1    &= ~(BIT4);
 }
 
-void TA0_0_IRQHandler(void){
-//Toggle P2.0
+void TA0_N_IRQHandler(void){
+    //Toggle P2.4
     P2->OUT ^= BIT4;
-// Clear the Interrupt Source Flag
+    // Clear the Interrupt Source Flag
     P6->IFG &= ~BIT1;
 }
 
@@ -53,8 +53,9 @@ void main(void)
 	timerA_start();
 	gpio_config();
 	config_NVIC();
-	while(1){
-}
 
-return;
+	while(1){
+	}
+
+	return;
 }
