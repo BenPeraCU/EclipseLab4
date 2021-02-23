@@ -31,7 +31,7 @@ void config_NVIC(void){
 void gpio_config(void){
     P2->DIR     |= BIT4;
     P2->OUT     &= ~BIT4;                    // Make sure that P2 is an output
-  //P2->DS      |= BIT4;                    // Sets drive strength to high
+    //P2->DS     = BIT4;                    // Sets drive strength to high
     P2->SEL0    |= BIT4;                    // Select the mode
     P2->SEL1    &= ~(BIT4);
 }
