@@ -15,7 +15,8 @@ void timerA_config(void){
     TIMER_A0->CTL       |= TIMER_A_CTL_CLR; // clears TimerA0
     TIMER_A0->CTL       |= TIMER_A_CTL_SSEL__SMCLK; //Use SMCLK
     TIMER_A0->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 1
-    TIMER_A0->CCR[0]    |= TICKS;
+    TIMER_A0->CCR[0]    = TICKS;
+    TIMER_A0->CCR[1]    = TICKS;
     TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_OUTMOD_7; //Resets Output
     TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_OUTMOD_4; // Sets output to toggle
     TIMER_A0->CCTL[1]   |= TIMER_A_CCTLN_CCIE;
