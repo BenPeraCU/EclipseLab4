@@ -10,6 +10,8 @@ float TickLength = 1.333;   //uS
 float SpeedOfSound = 0.034; //cm per uS
 int c = 4;
 
+int covDebug = 0;
+
 volatile uint16_t CaptureValues [2] = {0};
 volatile uint16_t ElapsedTicks = 0;
 volatile float ElapsedTime = 0;
@@ -117,6 +119,9 @@ void TA0_N_IRQHandler(void){
             CaptureValues[1] = TIMER_A0->CCR[2];
             if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_COV){
                 CaptureValues[1] += TICKS;
+                covDebug = 1;
+            } else{
+                covDebug = 0;
             }
         }
         // Clear the Interrupt Source Flag
