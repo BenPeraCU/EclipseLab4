@@ -113,8 +113,8 @@ void main(void)
 	while(1){
 
 	    ElapsedTicks = CaptureValues[1] - CaptureValues[0]; //find elapsed ticks
-	    ElapsedTime = ElapsedTicks * TickLength;            //convert ticks to time
-	    Distance = ElapsedTime * SpeedOfSound;              //centimeters
+	    ElapsedTime = ElapsedTicks * TickLength;        //convert ticks to time
+	    Distance = ElapsedTime * SpeedOfSound / 2;              //centimeters
 
 	}
 
