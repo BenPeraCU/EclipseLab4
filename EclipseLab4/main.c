@@ -131,6 +131,10 @@ void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
+    timerA2_stop();
+    timerA2_config();
+    timerA2_start();
+
 	timerA_stop();
 	timerA_config();
 	timerA_start();
