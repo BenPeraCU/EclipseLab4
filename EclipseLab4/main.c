@@ -1,5 +1,6 @@
 #include "msp.h"
 #define TICKS ((uint16_t)0x493F)
+#define TICKS2 ((uint16_t)0x927C)
 
 /**
  * main.c
@@ -7,6 +8,7 @@
 
 float TickLength = 1.333;   //uS
 float SpeedOfSound = 0.034; //cm per uS
+int c = 8;
 
 volatile uint16_t CaptureValues [2] = {0};
 volatile uint16_t ElapsedTicks = 0;
@@ -16,6 +18,29 @@ volatile float Distance = 0;
 void timerA_stop(void){
     TIMER_A0->CTL &= TIMER_A_CTL_MC__STOP;
 }
+
+void timerA2_stop(void){
+    TIMER_A2->CTL &= TIMER_A_CTL_MC__STOP;
+}
+
+void timerA2_start(void){
+    TIMER_A2->CTL |= TIMER_A_CTL_MC__UPDOWN;
+}
+
+void timerA2_config(void){
+    TIMER_A2->CTL       |= TIMER_A_CTL_CLR;
+    TIMER_A2->CTL       |= TIMER_A_CTL_SSEL__SMCLK;
+    TIMER_A2->CTL       |= TIMER_A_CTL_CLR;
+    TIMER_A2->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 2 ---- division by 4
+    TIMER_A2->CCR[0]    = TICKS2;
+    TIMER_A2->CCR[4]    = TICKS - c;
+
+    TIMER_A2->CCTL[4]   |= TIMER_A_CCTLN_OUTMOD_7; //Resets Output
+    TIMER_A2->CCTL[4]   &= TIMER_A_CCTLN_OUTMOD_4; // Sets output to toggle
+
+
+}
+
 
 void timerA_config(void){
 
@@ -52,8 +77,12 @@ void config_NVIC(void){
 
 void gpio_config(void){
     P2->DIR     |= BIT4;
+    P6->DIR     |= BIT7;
+    P6->OUT     &= ~(BIT7);
     P2->OUT     |= BIT4;            // Make sure that P2 is an output
-    //P2->DS     = BIT4;            // Sets drive strength to high
+
+    P6->SEL0    |= BIT7;
+    P6->SEL1    &= ~(BIT7);
     P2->SEL0    &= ~BIT4;           // Select the mode
     P2->SEL1    &= ~(BIT4);
 
