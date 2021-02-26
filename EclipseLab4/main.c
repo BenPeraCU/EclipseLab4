@@ -1,6 +1,6 @@
 #include "msp.h"
 #define TICKS ((uint16_t)0x493F)
-#define TICKS2 ((uint16_t)0x249F)
+#define TICKS2 ((uint16_t)0x6DDD)
 
 /**
  * main.c
