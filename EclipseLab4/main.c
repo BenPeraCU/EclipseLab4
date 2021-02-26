@@ -33,7 +33,7 @@ void timerA2_config(void){
     TIMER_A2->CTL       |= TIMER_A_CTL_CLR;
     TIMER_A2->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 2 ---- division by 4
     TIMER_A2->CCR[0]    = TICKS2;
-    TIMER_A2->CCR[4]    = TICKS - c;
+    TIMER_A2->CCR[4]    = TICKS2 -c;
 
     TIMER_A2->CCTL[4]   |= TIMER_A_CCTLN_OUTMOD_7; //Resets Output
     TIMER_A2->CCTL[4]   &= TIMER_A_CCTLN_OUTMOD_4; // Sets output to toggle
