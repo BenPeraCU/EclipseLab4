@@ -10,7 +10,7 @@ float TickLength = 1.333;   //uS
 float SpeedOfSound = 0.034; //cm per uS
 int c = 4;
 
-int covDebug = 0;
+volatile int covDebug = 0;
 
 volatile uint16_t CaptureValues [2] = {0};
 volatile uint16_t ElapsedTicks = 0;
