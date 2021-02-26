@@ -1,5 +1,5 @@
 #include "msp.h"
-#define TICKS ((uint16_t)0x493F)
+#define TICKS ((uint16_t)0xFFFF)
 #define TICKS2 ((uint16_t)0x6DDD)
 
 /**
@@ -12,8 +12,8 @@ int c = 4;
 
 volatile int covDebug = 0;
 
-volatile uint16_t CaptureValues [2] = {0};
-volatile uint16_t ElapsedTicks = 0;
+volatile uint32_t CaptureValues [2] = {0};
+volatile uint32_t ElapsedTicks = 0;
 volatile float ElapsedTime = 0;
 volatile float Distance = 0;
 
@@ -68,7 +68,7 @@ void timerA_config(void){
 void timerA_start(void){
     TIMER_A0->CTL |= TIMER_A_CTL_MC__UP;
 
-    TIMER_A0->CCR[0]    = TICKS;
+    TIMER_A0->CCR[0]  = TICKS;
 }
 
 void config_NVIC(void){
@@ -97,15 +97,14 @@ void TA0_N_IRQHandler(void){
 
         if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_CCI){
             CaptureValues[0] = TIMER_A0->CCR[2];
-            TIMER_A0->CCTL[2] &= ~TIMER_A_CCTLN_COV;    //clear Overflow
         }
-        if(~(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_CCI)){
+        else{
             CaptureValues[1] = TIMER_A0->CCR[2];
-            if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_COV){
-                CaptureValues[1] += TICKS;
-                covDebug = 1;
-            } else{
-                covDebug = 0;
+
+            if(CaptureValues[0] < CaptureValues[1]){
+                ElapsedTicks = CaptureValues[1] - CaptureValues[0]; //find elapsed ticks
+            }else{
+                ElapsedTicks = (CaptureValues[1] + TICKS) - CaptureValues[0];
             }
         }
         // Clear the Interrupt Source Flag
@@ -131,9 +130,9 @@ void main(void)
 	config_NVIC();
 
 	while(1){
-	    ElapsedTicks = CaptureValues[1] - CaptureValues[0]; //find elapsed ticks
+
 	    ElapsedTime = ElapsedTicks * TickLength;        //convert ticks to time
-	    Distance = ElapsedTime * SpeedOfSound / 2;              //centimeters
+	    Distance = ElapsedTime * SpeedOfSound / 2;      //centimeters
 	}
 
 }
