@@ -47,9 +47,9 @@ void config_NVIC(void){
 
 void gpio_config(void){
     P2->DIR     |= BIT4;
-    P2->OUT     |= BIT4;                    // Make sure that P2 is an output
-    //P2->DS     = BIT4;                    // Sets drive strength to high
-    P2->SEL0    &= ~BIT4;                    // Select the mode
+    P2->OUT     |= BIT4;            // Make sure that P2 is an output
+    //P2->DS     = BIT4;            // Sets drive strength to high
+    P2->SEL0    &= ~BIT4;           // Select the mode
     P2->SEL1    &= ~(BIT4);
 
     P2->DIR     &= ~BIT5;           //configure P2.5 to input
@@ -82,7 +82,7 @@ void TA0_N_IRQHandler(void){
         if(~(P2->IN & BIT5)){
             CaptureValues[1] = TIMER_A0->CCR[2];
             if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_COV){
-                //error happened plz implement
+                CaptureValues[1] += TICKS;
             }
         }
         // Clear the Interrupt Source Flag
