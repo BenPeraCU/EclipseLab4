@@ -5,8 +5,13 @@
  * main.c
  */
 
+float TickLength = 1.333;   //uS
+float SpeedOfSound = 0.034; //cm per uS
 
 volatile uint16_t CaptureValues [2] = {0};
+volatile uint16_t ElapsedTicks = 0;
+volatile float ElapsedTime = 0;
+volatile float Distance = 0;
 
 void timerA_stop(void){
     TIMER_A0->CTL &= TIMER_A_CTL_MC__STOP;
@@ -106,7 +111,11 @@ void main(void)
 
 
 	while(1){
+
+	    ElapsedTicks = CaptureValues[1] - CaptureValues[0]; //find elapsed ticks
+	    ElapsedTime = ElapsedTicks * TickLength;            //convert ticks to time
+	    Distance = ElapsedTime * SpeedOfSound;              //centimeters
+
 	}
 
-	return;
 }
