@@ -27,6 +27,8 @@ void timerA2_stop(void){
 
 void timerA2_start(void){
     TIMER_A2->CTL |= TIMER_A_CTL_MC__UPDOWN;
+    TIMER_A2->CCR[0]    = TICKS2;
+    TIMER_A2->CCR[4]    = TICKS2 -c;
 }
 
 void timerA2_config(void){
@@ -37,8 +39,6 @@ void timerA2_config(void){
     TIMER_A2->CTL       |= TIMER_A_CTL_SSEL__SMCLK;
     TIMER_A2->CTL       |= TIMER_A_CTL_CLR;
     TIMER_A2->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 2 ---- division by 4
-    TIMER_A2->CCR[0]    = TICKS2;
-    TIMER_A2->CCR[4]    = TICKS2 -c;
     TIMER_A2->CCTL[4]   |= TIMER_A_CCTLN_OUTMOD_7; //Resets Output
     TIMER_A2->CCTL[4]   &= TIMER_A_CCTLN_OUTMOD_4; // Sets output to toggle
 
@@ -52,7 +52,6 @@ void timerA_config(void){
     TIMER_A0->CTL       |= TIMER_A_CTL_CLR; // clears TimerA0
     TIMER_A0->CTL       |= TIMER_A_CTL_SSEL__SMCLK; //Use SMCLK
     TIMER_A0->CTL       |= TIMER_A_CTL_ID_2; // Sets timer ID to 2 ---- division by 4
-    TIMER_A0->CCR[0]    = TICKS;
 
 
     //configuring interrupts
@@ -68,6 +67,8 @@ void timerA_config(void){
 
 void timerA_start(void){
     TIMER_A0->CTL |= TIMER_A_CTL_MC__UP;
+
+    TIMER_A0->CCR[0]    = TICKS;
 }
 
 void config_NVIC(void){
@@ -94,11 +95,11 @@ void TA0_N_IRQHandler(void){
 
     if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_CCIFG){
 
-        if(P2->IN & BIT5){
+        if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_CCI){
             CaptureValues[0] = TIMER_A0->CCR[2];
             TIMER_A0->CCTL[2] &= ~TIMER_A_CCTLN_COV;    //clear Overflow
         }
-        if(~(P2->IN & BIT5)){
+        if(~(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_CCI)){
             CaptureValues[1] = TIMER_A0->CCR[2];
             if(TIMER_A0->CCTL[2] & TIMER_A_CCTLN_COV){
                 CaptureValues[1] += TICKS;
